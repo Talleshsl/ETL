@@ -21,6 +21,7 @@ Imports:
     RODBC,
     tibble,
     dplyr,
-    utils
+    utils,
+    digest
 URL: https://github.com/Talleshsl/ETL
 BugReports: https://github.com/Talleshsl/ETL/issues
