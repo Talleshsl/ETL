@@ -22,3 +22,5 @@ Imports:
     tibble,
     dplyr,
     utils
+URL: https://github.com/Talleshsl/ETL
+BugReports: https://github.com/Talleshsl/ETL/issues
