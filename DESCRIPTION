@@ -1,0 +1,24 @@
+Package: ETL
+Type: Package
+Title: ETL
+Version: 0.1.0
+Authors@R: 
+    person(given = "Talles",
+           family = "Lacerda",
+           role = c("aut", "cre"),
+           email = "talleshsl@gmail.com")
+Description: Esse pacote tem como objetivo auxiliar em praticas de importacao,
+             manipulacao e tratamentos de dados.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Imports: 
+    openxlsx,
+    lubridate,
+    stringr,
+    purrr,
+    RODBC,
+    tibble,
+    dplyr,
+    utils
