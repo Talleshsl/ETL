@@ -12,12 +12,9 @@
 #'                       Title:  Nome atribuido ao objeto importado
 #'                       Seq:    Sequencia de importacao, caso haja
 #'                               conjunto de arquivos a serem importados.
-#'                               Obs. O separador de sequencias é ';".
+#'                               Obs. O separador de sequencias e ';".
 #'                       Id_Seq: Id atribuido ao conjuto de dados das sequencias
-#'                Ex:tribble(~Name,      ~Dir,    ~Extension,   ~Sheet,   ~Title,   ~Seq,             ~Id_Seq
-#'                           Arquivo1,   Dir1,    xlsx,         Plan1,    Titulo1,  NA,               NA,
-#'                           Arquivo1,   Dir2,    csv,          NA,       Titulo2,  NA,               NA,
-#'                           ? - comum,  Dir3,    xlsx,         Plan1,    Titulo3,  2020.05;2020.06,  5;6)
+#'
 #'
 #' @param BD     Lista com os parametros para realizacao de consulta em
 #'               banco.
@@ -26,6 +23,19 @@
 #'                      Title:     Nome atribuido ao objeto.
 #'
 #' @return           Retorna um dataframe
+#'
+#'
+#' @examples
+#'
+#' Files <- tibble::tribble(~Name,~Dir,~Extension,~Sheet,~Title,~Seq,~Id_Seq,
+#'                          'Arquivo1','Dir1','xlsx','Plan1','Titulo1',NA,NA,
+#'                          'Arquivo1','Dir2','csv',NA,'Titulo2',NA,NA,
+#'                          '? - comum','Dir3','xlsx','Plan1','Titulo3','05;06','5;6')
+#'
+#' read(file=list(Name=Files$Name,Dir=Files$Dir,Extension=Files$Extension,
+#'               Sheet=Files$Sheet,Title=Files$Title,Seq=Files$Seq,Id_Seq=Files$Id_Seq))
+#'
+#'
 #' @export
 #'
 read <- function(file=list(Name=NULL,Dir=NULL,Extension=NULL,Sheet=NULL,
@@ -44,27 +54,29 @@ read <- function(file=list(Name=NULL,Dir=NULL,Extension=NULL,Sheet=NULL,
               name <- stringr::str_replace_all(file$Name[i],'\\?',j)
               if(file$Extension[i]=='xlsx'){
                 tmp <- openxlsx::read.xlsx(paste0(file$Dir[i],'\\',name,'.',file$Extension[i],sep=''),
-                                 sheet = file$Sheet[i], colNames = T,detectDates = F)
+                                           sheet = file$Sheet[i], colNames = T,detectDates = F)
               }
               if(file$Extension[i]=='csv'){
                 tmp <- utils::read.csv2(paste0(file$Dir[i],'\\',name,'.',file$Extension[i],sep=''),
-                                 dec=',', h= T)
+                                        dec=',', h= T,encoding = 'UTF-8')
               }
               if(file$Extension[i]=='txt'){
                 tmp <- utils::read.table(paste0(file$Dir[i],'\\',name,'.',file$Extension[i],sep=''),
-                                  dec=',', h= T)
+                                         dec=',', h= T,encoding = 'UTF-8')
               }
               tmp2 <- cbind(rep(ids[ls==j],nrow(tmp)),tmp)
-              colnames(tmp2) <- c('Seq',colnames(tmp))
+              colnames(tmp2) <- make.unique(c('Seq',colnames(tmp)))
+              tmp2 <- tmp2 %>%
+                dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
               return(tmp2)
             },error=function(e){return()})
           })
           if(length(tmp)==1){
-            tmp <- purrr::reduce(tmp,rbind)
+            tmp <- purrr::reduce(tmp,dplyr::bind_rows)
           }else{
             tmp <- purrr::reduce(lapply(tmp, "[",
                                         c(1:min(unlist(purrr::map(tmp,ncol))))),
-                                 rbind)
+                                 dplyr::bind_rows)
           }
           tmp
         },error=function(e){return()})
@@ -72,15 +84,15 @@ read <- function(file=list(Name=NULL,Dir=NULL,Extension=NULL,Sheet=NULL,
         tmp <- tryCatch(expr = {
           if(file$Extension[i]=='xlsx'){
             tmp <- openxlsx::read.xlsx(paste0(file$Dir[i],'\\',file$Name[i],'.',file$Extension[i],sep=''),
-                             sheet = file$Sheet[i], colNames = T,detectDates = F)
+                                       sheet = file$Sheet[i], colNames = T,detectDates = F)
           }
           if(file$Extension[i]=='csv'){
             tmp <- utils::read.csv2(paste0(file$Dir[i],'\\',file$Name[i],'.',file$Extension[i],sep=''),
-                             dec=',', h= T)
+                                    dec=',', h= T)
           }
           if(file$Extension[i]=='txt'){
             tmp <- utils::read.table(paste0(file$Dir[i],'\\',file$Name[i],'.',file$Extension[i],sep=''),
-                              dec=',', h= T)
+                                     dec=',', h= T)
           }
           tmp
         },error=function(e){return()})

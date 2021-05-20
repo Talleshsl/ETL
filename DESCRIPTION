@@ -1,7 +1,7 @@
 Package: ETL
 Type: Package
 Title: ETL
-Version: 0.1.0
+Version: 0.1.4
 Authors@R: 
     person(given = "Talles",
            family = "Lacerda",
@@ -9,6 +9,7 @@ Authors@R:
            email = "talleshsl@gmail.com")
 Description: Esse pacote tem como objetivo auxiliar em praticas de importacao,
              manipulacao e tratamentos de dados.
+Depends: R (>= 3.3.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -22,6 +23,6 @@ Imports:
     tibble,
     dplyr,
     utils,
-    digest
+    utf8
 URL: https://github.com/Talleshsl/ETL
 BugReports: https://github.com/Talleshsl/ETL/issues
