@@ -20,3 +20,4 @@ getmode <- function(v, na.rm=TRUE, zero.rm=TRUE) {
   uniqv <- unique(v)
   uniqv[which.max(tabulate(match(v, uniqv)))]
 }
+    a
