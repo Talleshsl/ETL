@@ -33,7 +33,7 @@
 #'
 map_vars <- function(data,mapping=list(Field=NULL,Type=NULL,Variable=NULL,Decimal=NULL),typeDate='numeric'){
   # Seleciona as variaveis
-  data <- data[,colnames(data)%in%mapping$Variable]
+  data <- as.data.frame(data[,colnames(data)%in%mapping$Variable])
 
   # Tipificacao das variaveis
   if(is.null(colnames(data))){
