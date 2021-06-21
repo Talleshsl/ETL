@@ -61,7 +61,7 @@ map_vars <- function(data,mapping=list(Field=NULL,Type=NULL,Variable=NULL,Decima
                            "Inteiro" = as.integer(
                              stringr::str_remove_all(data[,id],
                                                      "[:alpha:]")),
-                           "Data"    = if(T%in%stringr::str_detect(data[,id],'[:punct:]')){
+                           "Data"    = if(typeDate!='numeric'){
                              switch (typeDate,
                                      'dmy' = lubridate::dmy(stringr::str_sub(data[,id],end=10)),
                                      'dym' = lubridate::dym(stringr::str_sub(data[,id],end=10)),
