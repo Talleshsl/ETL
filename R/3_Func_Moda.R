@@ -14,8 +14,8 @@
 #' @return         Retorna a moda
 #' @export
 #'
-getmode <- function(v, na.rm=TRUE, zero.rm=TRUE) {
-  if(na.rm==TRUE){ v <- v[!is.na(v)&v>0]}
+getmode <- function(v, na.rm=TRUE, zero.rm=FALSE) {
+  if(na.rm==TRUE){ v <- v[!is.na(v)]}
   if(zero.rm==TRUE){ v <- v[v!=0]}
   uniqv <- unique(v)
   uniqv[which.max(tabulate(match(v, uniqv)))]
